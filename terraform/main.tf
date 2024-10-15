@@ -20,3 +20,9 @@ module "predition_generator_lambda" {
     }  
 }
 
+module "prediction_dynamodb_table" {
+    source = "./modules/dynamodb"
+    table_name = "predictions"
+    hash_key = "predictionId"
+}
+
