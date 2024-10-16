@@ -8,6 +8,8 @@ resource "aws_lambda_function" "lambda_function" {
     source_code_hash = filebase64sha256(var.lambda_zip_path)
 
     environment {
-      variables = var.lambda_environment_vars
+      variables = merge(var.lambda_environment_vars, {
+        DYNAMODB_TABLE = var.dynamodb_table_name
+      }) 
     }
 }

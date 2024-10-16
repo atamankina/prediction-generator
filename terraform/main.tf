@@ -15,6 +15,7 @@ module "predition_generator_lambda" {
     handler = "index.handler"
     lambda_role_arn = module.prediction_function_execution_role.lambda_execution_role_arn
     lambda_zip_path = "${path.module}/prediction-generator-lambda.zip"
+    dynamodb_table_name = module.prediction_dynamodb_table.dynamodb_table_name
     lambda_environment_vars = {
       API_TOKEN = "test_value"
     }  

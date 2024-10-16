@@ -27,3 +27,8 @@ variable "lambda_environment_vars" {
     description = "Environment variables for the Lambda function"
     type = map(string)
 }
+
+variable "dynamodb_table_name" {
+    description = "The name of the DynamoDB table to use"
+    type = string
+}
