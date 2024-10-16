@@ -14,7 +14,7 @@ module "post_prediction_lambda" {
   source              = "./modules/lambda"
   function_name       = "post-prediction-lambda"
   runtime             = "nodejs20.x"
-  handler             = "post.handler"
+  handler             = "prediction-functions/post.handler"
   lambda_role_arn     = module.prediction_function_execution_role.lambda_execution_role_arn
   lambda_zip_path     = "${path.module}/post-prediction-lambda.zip"
   dynamodb_table_name = module.prediction_table.dynamodb_table_name
@@ -28,7 +28,7 @@ module "get_predictions_lambda" {
   source              = "./modules/lambda"
   function_name       = "get-predictions-lambda"
   runtime             = "nodejs20.x"
-  handler             = "get.handler"
+  handler             = "prediction-functions/get.handler"
   lambda_role_arn     = module.prediction_function_execution_role.lambda_execution_role_arn
   lambda_zip_path     = "${path.module}/get-predictions-lambda.zip"
   dynamodb_table_name = module.prediction_table.dynamodb_table_name
@@ -41,7 +41,7 @@ module "delete_prediction_lambda" {
   source              = "./modules/lambda"
   function_name       = "delete-prediction-lambda"
   runtime             = "nodejs20.x"
-  handler             = "delete.handler"
+  handler             = "prediction-functions/delete.handler"
   lambda_role_arn     = module.prediction_function_execution_role.lambda_execution_role_arn
   lambda_zip_path     = "${path.module}/delete-prediction-lambda.zip"
   dynamodb_table_name = module.prediction_table.dynamodb_table_name

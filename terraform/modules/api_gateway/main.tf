@@ -5,7 +5,7 @@ resource "aws_api_gateway_rest_api" "api" {
 }
 
 # POST /prediction (Create Prediction)
-resource "aws_api_gateway_resource" "post_prediction" {
+resource "aws_api_gateway_resource" "prediction_resource" {
   rest_api_id = aws_api_gateway_rest_api.api.id
   parent_id   = aws_api_gateway_rest_api.api.root_resource_id
   path_part   = "prediction"
@@ -13,14 +13,14 @@ resource "aws_api_gateway_resource" "post_prediction" {
 
 resource "aws_api_gateway_method" "post_prediction_method" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.post_prediction.id
+  resource_id   = aws_api_gateway_resource.prediction_resource.id
   http_method   = "POST"
   authorization = "NONE"
 }
 
 resource "aws_api_gateway_integration" "post_prediction_integration" {
   rest_api_id            = aws_api_gateway_rest_api.api.id
-  resource_id            = aws_api_gateway_resource.post_prediction.id
+  resource_id            = aws_api_gateway_resource.prediction_resource.id
   http_method            = aws_api_gateway_method.post_prediction_method.http_method
   integration_http_method = "POST"
   type                   = "AWS_PROXY"
@@ -28,22 +28,16 @@ resource "aws_api_gateway_integration" "post_prediction_integration" {
 }
 
 # GET /predictions (Get All Predictions)
-resource "aws_api_gateway_resource" "get_predictions" {
-  rest_api_id = aws_api_gateway_rest_api.api.id
-  parent_id   = aws_api_gateway_rest_api.api.root_resource_id
-  path_part   = "predictions"
-}
-
 resource "aws_api_gateway_method" "get_predictions_method" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.get_predictions.id
+  resource_id   = aws_api_gateway_resource.prediction_resource.id
   http_method   = "GET"
   authorization = "NONE"
 }
 
 resource "aws_api_gateway_integration" "get_predictions_integration" {
   rest_api_id            = aws_api_gateway_rest_api.api.id
-  resource_id            = aws_api_gateway_resource.get_predictions.id
+  resource_id            = aws_api_gateway_resource.prediction_resource.id
   http_method            = aws_api_gateway_method.get_predictions_method.http_method
   integration_http_method = "POST"
   type                   = "AWS_PROXY"
@@ -51,15 +45,16 @@ resource "aws_api_gateway_integration" "get_predictions_integration" {
 }
 
 # DELETE /prediction/{id} (Delete Prediction by ID)
-resource "aws_api_gateway_resource" "delete_prediction" {
+
+resource "aws_api_gateway_resource" "delete_prediction_resource" {
   rest_api_id = aws_api_gateway_rest_api.api.id
-  parent_id   = aws_api_gateway_rest_api.api.root_resource_id
-  path_part   = "prediction"
+  parent_id   = aws_api_gateway_resource.prediction_resource.id
+  path_part   = "{predictionId}"  # This ensures the predictionId is part of the path
 }
 
 resource "aws_api_gateway_method" "delete_prediction_method" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.delete_prediction.id
+  resource_id   = aws_api_gateway_resource.delete_prediction_resource.id
   http_method   = "DELETE"
   authorization = "NONE"
 
@@ -70,7 +65,7 @@ resource "aws_api_gateway_method" "delete_prediction_method" {
 
 resource "aws_api_gateway_integration" "delete_prediction_integration" {
   rest_api_id            = aws_api_gateway_rest_api.api.id
-  resource_id            = aws_api_gateway_resource.delete_prediction.id
+  resource_id            = aws_api_gateway_resource.delete_prediction_resource.id
   http_method            = aws_api_gateway_method.delete_prediction_method.http_method
   integration_http_method = "POST"
   type                   = "AWS_PROXY"
