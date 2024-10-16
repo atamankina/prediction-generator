@@ -19,7 +19,7 @@ exports.handler = async (event) => {
       await dynamodb.put(params).promise();
       return {
         statusCode: 200,
-        body: JSON.stringify({ message: "Prediction saved successfully", predictionID })
+        body: JSON.stringify({ message: "Prediction saved successfully", predictionId })
       };
     } catch (error) {
         return {
