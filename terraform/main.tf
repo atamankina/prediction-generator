@@ -6,6 +6,7 @@ module "prediction_function_execution_role" {
     source = "./modules/iam"
     role_name = "prediction_generator_function_execution_role"
     policy_name = "AWSLambdaBasicExecutionRole"
+    dynamodb_table_arn = module.prediction_dynamodb_table.dynamodb_table_arn
 }
 
 module "predition_generator_lambda" {
