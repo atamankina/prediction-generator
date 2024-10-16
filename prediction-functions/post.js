@@ -2,11 +2,12 @@ const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 exports.handler = async (event) => {
+    const tableName = process.env.DYNAMODB_TABLE;
+    const { question, prediction } = JSON.parse(event.body);
     const predictionId = `pred-${Date.now()}`;
-    const { question, prediction } = event;
 
     const params = {
-        TableName: process.env.DYNAMODB_TABLE,
+        TableName: tableName,
         Item: {
             predictionId,
             question,
@@ -18,12 +19,12 @@ exports.handler = async (event) => {
         await dynamodb.put(params).promise();
         return {
             statusCode: 200,
-            body: JSON.stringify({ message: "Prediction stored successfully", predictionId })
+            body: JSON.stringify({ message: "Prediction created successfully", predictionId })
         };
     } catch (error) {
         return {
             statusCode: 500,
-            body: JSON.stringify({ message: "Error storing prediction", error })
+            body: JSON.stringify({ message: "Error creating prediction", error })
         };
     }
 };
