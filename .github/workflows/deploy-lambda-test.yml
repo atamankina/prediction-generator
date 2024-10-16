@@ -23,16 +23,13 @@ jobs:
         run: npm install
 
       - name: Zip POST Lambda Function (post-prediction-lambda)
-        working-directory: prediction-functions
-        run: zip -r post-prediction-lambda.zip post.js node_modules/
+        run: zip -r terraform/post-prediction-lambda.zip prediction-functions/post.js node_modules/
 
       - name: Zip GET Lambda Function (get-predictions-lambda)
-        working-directory: prediction-functions
-        run: zip -r get-predictions-lambda.zip get.js node_modules/
+        run: zip -r terraform/get-predictions-lambda.zip prediction-functions/get.js node_modules/
 
       - name: Zip DELETE Lambda Function (delete-prediction-lambda)
-        working-directory: prediction-functions
-        run: zip -r delete-prediction-lambda.zip delete.js node_modules/
+        run: zip -r terraform/delete-prediction-lambda.zip prediction-functions/delete.js node_modules/
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -43,13 +40,13 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Deploy POST Lambda to AWS
-        run: aws lambda update-function-code --function-name post-prediction-lambda --zip-file fileb://prediction-functions/post-prediction-lambda.zip
+        run: aws lambda update-function-code --function-name post-prediction-lambda --zip-file fileb://terraform/post-prediction-lambda.zip
 
       - name: Deploy GET Lambda to AWS
-        run: aws lambda update-function-code --function-name get-predictions-lambda --zip-file fileb://prediction-functions/get-predictions-lambda.zip
+        run: aws lambda update-function-code --function-name get-predictions-lambda --zip-file fileb://terraform/get-predictions-lambda.zip
 
       - name: Deploy DELETE Lambda to AWS
-        run: aws lambda update-function-code --function-name delete-prediction-lambda --zip-file fileb://prediction-functions/delete-prediction-lambda.zip
+        run: aws lambda update-function-code --function-name delete-prediction-lambda --zip-file fileb://terraform/delete-prediction-lambda.zip
 
   test:
     runs-on: ubuntu-latest
@@ -65,6 +62,9 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
+
+      - name: Set environment variables for testing
+        run: echo "OPENAI_API_KEY=fake-key-for-testing" >> $GITHUB_ENV
 
       - name: Run Lambda Function Tests
         run: |
