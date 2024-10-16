@@ -1,4 +1,4 @@
-name: Deploy Prediction Lambda Functions
+name: Deploy Prediction Lambda Functions Test
 
 on:
   push:
