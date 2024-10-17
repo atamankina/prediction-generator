@@ -1,49 +1,39 @@
 variable "api_name" {
-  description = "The name of the API Gateway."
-  type = string
+  description = "The name of the API Gateway"
+  type        = string
 }
 
-variable "api_description" {
-  description = "The description of the API Gateway."
-  type = string
-}
-
-variable "api_path" {
-    description = "The path to the API resource."
-    type = string
-}
-
-variable "lambda_post_invoke_arn" {
-    description = "The ARN of the lambda function processing the POST requests."
-    type = string
-}
-
-variable "lambda_get_invoke_arn" {
-    description = "The ARN of the lambda function processing the GET requests."
-    type = string
-}
-
-variable "lambda_delete_invoke_arn" {
-    description = "The ARN of the lambda function processing the DELETE requests."
-    type = string
-}
-
-variable "api_stage_name" {
-    description = "The deployment stage of the API."
-    type = string
+variable "stage_name" {
+  description = "The stage name of the API (e.g., dev, prod)"
+  type        = string
 }
 
 variable "lambda_post_function_name" {
-    description = "The name of the lambda function processing the POST requests."
-    type = string
+  description = "The name of the Lambda function to handle POST requests"
+  type        = string
 }
 
 variable "lambda_get_function_name" {
-    description = "The name of the lambda function processing the GET requests."
-    type = string
+  description = "The name of the Lambda function to handle GET requests"
+  type        = string
 }
 
 variable "lambda_delete_function_name" {
-    description = "The name of the lambda function processing the DELETE requests."
-    type = string
+  description = "The name of the Lambda function to handle DELETE requests"
+  type        = string
+}
+
+variable "lambda_post_invoke_arn" {
+  description = "The ARN of the Lambda function to handle POST requests"
+  type        = string
+}
+
+variable "lambda_get_invoke_arn" {
+  description = "The ARN of the Lambda function to handle GET requests"
+  type        = string
+}
+
+variable "lambda_delete_invoke_arn" {
+  description = "The ARN of the Lambda function to handle DELETE requests"
+  type        = string
 }
