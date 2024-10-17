@@ -22,6 +22,11 @@ exports.handler = async (event) => {
 
         return {
             statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*",  // Allow all origins or specify your frontend origin
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET,DELETE"
+            },
             body: JSON.stringify({ message: "Prediction deleted successfully", predictionId })
         };
     } catch (error) {
@@ -29,6 +34,11 @@ exports.handler = async (event) => {
 
         return {
             statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*",  // Allow all origins or specify your frontend origin
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET,DELETE"
+            },
             body: JSON.stringify({ message: "Error deleting prediction", error: error.message })
         };
     }

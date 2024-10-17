@@ -18,6 +18,11 @@ exports.handler = async () => {
 
         return {
             statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*",  // Allow all origins or specify your frontend origin
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+            },
             body: JSON.stringify(data.Items)
         };
     } catch (error) {
@@ -25,6 +30,11 @@ exports.handler = async () => {
 
         return {
             statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*",  // Allow all origins or specify your frontend origin
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+            },
             body: JSON.stringify({ message: "Error fetching predictions", error: error.message })
         };
     }

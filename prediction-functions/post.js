@@ -21,6 +21,11 @@ exports.handler = async function (event) {
         console.error("Failed to parse request body:", error);
         return {
             statusCode: 400,
+            headers: {
+                "Access-Control-Allow-Origin": "*",  // Allow all origins or specify your frontend origin
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+            },
             body: JSON.stringify({ message: "Invalid request body" })
         };
     }
@@ -30,6 +35,11 @@ exports.handler = async function (event) {
         console.warn("Validation failed: 'question' field is missing or not a string.");
         return {
             statusCode: 400,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+            },
             body: JSON.stringify({ message: "'question' field is required and must be a string" })
         };
     }
@@ -71,6 +81,11 @@ exports.handler = async function (event) {
         // Return success response
         return {
             statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+            },
             body: JSON.stringify({
                 message: "Prediction generated and stored successfully",
                 predictionId,
@@ -85,6 +100,11 @@ exports.handler = async function (event) {
         // Handle error response from OpenAI or DynamoDB
         return {
             statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+            },
             body: JSON.stringify({
                 message: "Error generating prediction or storing in DynamoDB",
                 error: error.message || error
