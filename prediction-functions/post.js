@@ -45,9 +45,9 @@ exports.handler = async function (event) {
             model: "gpt-3.5-turbo",
             messages: [
                 { role: "system", content: "You are a helpful assistant." },
-                { role: "user", content: `Generiere eine Zukunftsvorhersage basierend auf der Frage: "${question}". Antworte auf die Frage in einer überraschenden, non-konventionellen Art, mit tollem und exquisitem Humor, nicht mehr als 200 Zeichen, auf Deutsch, im lockeren und freundlichen Stil.` }
+                { role: "user", content: `Generiere eine Zukunftsvorhersage basierend auf der Frage: "${question}". Antworte auf die Frage in einer überraschenden, non-konventionellen Art, mit tollem und exquisitem Humor, nicht mehr als 3 Sätze, auf Deutsch, im lockeren und freundlichen Stil.` }
             ],
-            max_tokens: 60,
+            max_tokens: 200,
             temperature: 0.7
         });
 
