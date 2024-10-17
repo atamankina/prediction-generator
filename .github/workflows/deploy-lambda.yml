@@ -1,9 +1,10 @@
-name: Deploy Lambda Function
+name: Deploy Three Prediction Lambda Functions
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -21,8 +22,14 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Zip Lambda Code
-        run: zip -r function.zip .
+      - name: Zip POST Lambda Function (post-prediction-lambda)
+        run: zip -r terraform/post-prediction-lambda.zip prediction-functions/post.js node_modules/
+
+      - name: Zip GET Lambda Function (get-predictions-lambda)
+        run: zip -r terraform/get-predictions-lambda.zip prediction-functions/get.js node_modules/
+
+      - name: Zip DELETE Lambda Function (delete-prediction-lambda)
+        run: zip -r terraform/delete-prediction-lambda.zip prediction-functions/delete.js node_modules/
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -32,8 +39,14 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Deploy to AWS Lambda
-        run: aws lambda update-function-code --function-name prediction_generator_function --zip-file fileb://function.zip
+      - name: Deploy POST Lambda to AWS
+        run: aws lambda update-function-code --function-name post-prediction-lambda --zip-file fileb://terraform/post-prediction-lambda.zip
+
+      - name: Deploy GET Lambda to AWS
+        run: aws lambda update-function-code --function-name get-predictions-lambda --zip-file fileb://terraform/get-predictions-lambda.zip
+
+      - name: Deploy DELETE Lambda to AWS
+        run: aws lambda update-function-code --function-name delete-prediction-lambda --zip-file fileb://terraform/delete-prediction-lambda.zip
 
   test:
     runs-on: ubuntu-latest
@@ -50,7 +63,16 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Run Lambda Function Test
+      - name: Set environment variables for testing
+        run: echo "OPENAI_API_KEY=fake-key-for-testing" >> $GITHUB_ENV
+
+      - name: Run Lambda Function Tests
         run: |
-          echo "Running lambda function test..."
-          node -e "const { handler } = require('./index'); handler({}, null, (err, res) => console.log(res));"
+          echo "Running POST lambda function test..."
+          node -e "const { handler } = require('./prediction-functions/post'); handler({}, null, (err, res) => console.log(res));"
+
+          echo "Running GET lambda function test..."
+          node -e "const { handler } = require('./prediction-functions/get'); handler({}, null, (err, res) => console.log(res));"
+
+          echo "Running DELETE lambda function test..."
+          node -e "const { handler } = require('./prediction-functions/delete'); handler({ pathParameters: { predictionId: 'test-id' } }, null, (err, res) => console.log(res));"
